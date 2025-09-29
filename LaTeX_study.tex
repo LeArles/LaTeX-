@@ -1,0 +1,1765 @@
+\documentclass{report}
+\usepackage{ctex}
+\usepackage{xcolor}       % 用于定义颜色
+\usepackage{listings}     % 用于代码排版
+\usepackage[textwidth=16cm, textheight=24cm]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{subcaption}
+\usepackage{tcolorbox}
+\usepackage[ruled, linesnumbered]{algorithm2e}
+\usepackage{bussproofs}
+\usepackage{bm}
+\usepackage{amsthm}
+
+% 定义高亮颜色
+\definecolor{keywords}{rgb}{0,0,1}       % 蓝色
+\definecolor{comments}{rgb}{0,0.5,0}     % 绿色
+\definecolor{strings}{rgb}{1,0,0}        % 红色
+
+\usepackage[
+    colorlinks=true,
+    linkcolor=pink,
+    urlcolor=purple,
+    citecolor=green
+]{hyperref}
+\usepackage{cleveref}
+
+% 定义一个名为 'thm' 的环境，打印为 '定理'
+\newtheorem{thm}{定理}[section]
+% 定义一个名为 'defn' 的环境，打印为 '定义'
+\newtheorem{defn}{定义}
+% 2. 定义引理，使用定理的计数器 [thm]
+\newtheorem{lem}[thm]{引理}
+
+\title{第一个 \LaTeX 项目——\LaTeX 使用教程}
+\author{李弈}
+\date{2025年9月29日}
+
+% ------------------- listings 全局设置 -------------------
+% 全局设置 listings 样式
+\lstset{
+    language=[latex]TeX,             % 设置语言为 LaTeX
+    basicstyle=\ttfamily,            % 字体为等宽
+    keywordstyle=\color{keywords},   % 关键字颜色
+    commentstyle=\color{comments},   % 注释颜色
+    stringstyle=\color{strings},     % 字符串颜色
+    showstringspaces=false,          % 不显示字符串中的空格
+    numbers=left,                    % 显示行号，在左侧
+    numberstyle=\tiny,               % 行号字体大小
+    breaklines=true,                 % 自动换行
+    frame=single,                    % 显示一个单边框
+}
+% --------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+% 基础篇从这里开始，作为第一个章节（chapter）
+\chapter{基础篇}
+
+\section{基本命令与环境}
+
+\subsection{基本命令}
+在 \LaTeX 中，\textbf{命令}是用于执行特定操作的指令。它们通常以反斜杠 \verb|\| 开头，后面跟着命令名称。有些命令可以接受参数，这些参数用花括号 \{\} 包裹。常见的命令包括：
+\begin{itemize}
+    \item \verb|\documentclass{}|：这是每个 \LaTeX 文档的第一个命令，用于声明文档的类型，例如\texttt{article}、\texttt{report} 或 \texttt{book}。
+    \item \verb|\usepackage{}|：用于导入宏包，扩展 \LaTeX 的功能。
+    \item \verb|\section{}| 和 \verb|\subsection{}|：用于创建文档的标题结构。
+    \item \verb|\title{}| 和 \verb|\author{}|：设置文档的标题和作者信息。
+    \item \verb|\maketitle|：用于生成并显示标题部分。
+    \item \verb|\textbf{}|、\verb|\textit{}|、\verb|\texttt{}|：用于设置文本样式。
+    \begin{itemize}
+        \item \verb|\textbf{}|：生成\textbf{加粗}的文本。
+        \item \verb|\textit{}|：生成\textit{斜体}的文本。
+        \item \verb|\texttt{}|：生成\texttt{等宽}的文本，可用于代码和命令。
+    \end{itemize}
+    \item \verb|\\|：用于手动换行。
+\end{itemize}
+
+\subsection{基本环境}
+\textbf{环境}用于对文档的某个区域进行特殊的排版，它们由一对 \verb|\begin{}| 和 \verb|\end{}| 命令定义。所有需要特殊处理的内容都放在这对命令之间。常见的环境包括：
+\begin{itemize}
+    \item \verb|document|：最重要的环境，所有可见的文档必须放在 \verb|\begin{document}| 和\verb|\end{document}| 之间。
+    \item \verb|itemsize|：用于创建\textbf{无序列表}。在 \verb|\begin{itemsize}| 和 \verb|\end{itemsize}| 之间，使用 \verb|\item| 命令来标记每一个列表项。具体使用方法如下：
+    \begin{lstlisting}
+\begin{itemize}
+    \item 第一个项目
+    \item 第二个项目
+\end{itemize}
+    \end{lstlisting}
+    \item \verb|enumerate|：用于创建\textbf{有序列表}。具体使用方法如下：
+        \begin{lstlisting}
+\begin{enumerate}
+    \item 第一个项目
+    \item 第二个项目
+\end{enumerate}
+        \end{lstlisting}
+    \item \verb|center|：用于将文本或内容居中对齐。具体使用方法如下：
+        \begin{lstlisting}
+\begin{center}
+    居中对齐的文本。
+\end{center}
+        \end{lstlisting}
+    \item \verb|figure|：用于管理图片。这是一个“浮动体”环境，\LaTeX 会自动将图片放置在最佳位置，以避免排版不美观。
+    \item \verb|table|：用于创建表格。这是一个“浮动体”环境
+\end{itemize}
+
+\section{包管理}
+在 \LaTeX 中，宏包是一个核心概念。可以把它们理解成扩展 \LaTeX 功能的插件或库。宏包可以做很多基础 \LaTeX 无法直接完成的事情，比如：插入图片、创建复杂的数学公式、改变页面布局，或者使用特定字体等。
+
+要使用一个宏包，需要在文档的\textbf{导言区}中使用 \verb|\usepackage| 命令。导言区是指 \verb|\documentclass{}| 和 \verb|\begin{document}| 之间的部分。
+
+基本语法是：
+    \begin{lstlisting}[title=Latex 代码示例]
+\usepackage{package_name}
+    \end{lstlisting}
+
+有些宏包可以接受\textbf{选项}，这些选项用方括号 \verb|[]| 包裹，放在宏包名称的前面。选项用于修改宏包的行为。例如 \verb|geometry| 宏包可以用来设置文档的页边距。代码如下所示：
+    \begin{lstlisting}
+\usepackage[a4paper, margin=2cm]{geometry}
+    \end{lstlisting}
+
+对于初学者来说，以下宏包是必不可少的：
+\begin{itemize}
+    \item \verb|amsmath|：增强数学公式排版功能。
+    \item \verb|graphicx|：在文档中插入图片。
+    \item \verb|hyperref|：创建可点击的超链接，让 PDF 文档中的目录，引用和网址都变得可交互。
+    \item \verb|xcolor|：提供丰富的颜色选项，为文本、背景上色。
+\end{itemize}
+
+\section{章节与段落}
+在 \LaTeX 中，需要通过一些规则和命令来告诉 \LaTeX 如何处理文本。
+
+\subsection{章节}
+在 \LaTeX 中，可以使用不同的标题命令来创建不同级别的章节和子章节。常用命令为：
+\begin{itemize}
+    \item \verb|\section{标题}|：一级标题
+    \item \verb|\subsection{标题}|：二级标题
+    \item \verb|\subsubsection{标题}|：三级标题
+\end{itemize}
+
+\subsection{段落}
+
+\LaTeX 将文本组织成段落。默认情况下，它会自动识别段落。要开始一个新的段落，只需要在两个段落之间留一个空行即可。
+\begin{itemize}
+    \item \textbf{自动缩进}：\LaTeX 会在每个段落的开头自动缩进
+    \item \textbf{换行}：无需手动换行，\LaTeX 会根据版面的宽度自动处理
+\end{itemize}
+示例如下：
+\begin{lstlisting}
+这是第一个段落
+
+这是第二个段落
+\end{lstlisting}
+
+如果想在不开始新段落的情况下\textbf{强制换行}，可以使用命令 \verb|\\| 或 \verb|\newline|。
+
+\section{文本}
+
+\subsection{字体大小}
+\LaTeX 定义了一系列用于改变字体大小的命令，这些命令通常用于文档的特定部分，比如标题或标注。它们是\textbf{开关}命令，一旦使用就会影响其后面的所有文本，直到遇到另一个字体大小命令或作用范围结束。
+
+因此设置字体大小时，更常用的一个办法如下所示：
+\begin{lstlisting}
+这是普通大小的文本，{\Large 大的字体} 在这里。
+\end{lstlisting}
+
+从大到小排列的字体大小命令：
+\begin{itemize}
+    \item \verb|\Huge|
+    \item \verb|\huge|
+    \item \verb|\LARGE|
+    \item \verb|\Large|
+    \item \verb|\large|
+    \item \verb|\normalsize|
+    \item \verb|\small|
+    \item \verb|\footnotesize|
+    \item \verb|\scriptsize|
+    \item \verb|\tiny|
+\end{itemize}
+
+\subsection{特殊字符}
+\LaTeX 对一些字符有特殊的用途，比如 \#、\$、\% 等。如果想在文本中使用这些字符，需要用反斜杠进行转义。
+\begin{itemize}
+    \item 对于 \# 等普通的特殊字符，写法为：\verb|\#|
+    \item 对于 \textbackslash\ 这种特殊字符，写法为：\verb|\textbackslash|
+\end{itemize}
+
+\subsection{空格}
+几种空格方法如下：
+\begin{table}[h!]
+    \centering
+    \caption{常用空格方法}
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        空格方式 & 源代码 & 显示 & 宽度 \\ \hline
+        普通空格 & \verb|a b| & a b & 一个英文字符的宽度\\ \hline
+        quad空格 & \verb|a\quad b| & a\quad b & 一个中文字符的宽度\\ \hline
+        qquad空格 & \verb|a\qquad b| & a\qquad b & 两个中文字符的宽度\\ \hline
+        大空格 & \verb|a\ b| & a\ b & 1/3 字符的宽度\\ \hline
+    \end{tabular}
+    \label{tab:sample}
+\end{table}
+
+\subsection{换页}
+使用 \verb|\newpage| 进行换页，一般在一页的最后写
+
+\section{表格}
+
+\subsection{tabular}
+
+创建表格最常用的环境是 \verb|tabular|。而 \verb|tabular| 环境是用来创建表格内容的，它需要一个参数来定义表格的列格式，基本语法如下：
+\begin{lstlisting}[title=Latex 代码示例]
+\begin{tabular}{格式}
+    \hline %顶部横线，一般来说必须要写
+    表头1 & ... & 表头 n \\ [\hline]
+    表项11 & ... & 表项1n \\ [\hline]
+    ...
+    表项n1 & ... & 表项nn \\ [\hline]
+\end{tabular}
+\end{lstlisting}
+
+\begin{itemize}
+    \item \verb|{格式}|：这是一个必要的参数，用于定义表格中每一列的对齐方式。
+        \begin{itemize}
+            \item \verb|l|：左对齐
+            \item \verb|c|：居中对齐
+            \item \verb|r|：右对齐
+            \item \verb|||：绘制一条垂直线
+        \end{itemize}
+    \item 对于表头/每一行表项后面的 \verb|[\hline]| 代表 \verb|\hline| 是可以省略的，如果写的话，那么该表头/表项上就会出现一个横线，不写的话就不会出现这条横线
+\end{itemize}
+
+对于如下 \LaTeX 代码：
+\begin{lstlisting}
+\begin{tabular}{|l|c|r|}
+\hline % 顶部横线
+姓名 & 年龄 & 城市 \\ \hline % 表格头
+小明 & 25 & 北京 \\ \hline
+小红 & 28 & 上海 \\ \hline
+\end{tabular}
+\end{lstlisting}
+
+会出现如下效果
+
+\begin{tabular}{|l|c|r|}
+\hline % 顶部横线
+姓名 & 年龄 & 城市 \\ \hline % 表格头
+小明 & 25 & 北京 \\ \hline
+小红 & 28 & 上海 \\ \hline
+\end{tabular}
+
+\subsection{table}
+\verb|tabular| 环境只是创建了表格内容，它不会自动添加标题或编号。如果想让表格拥有标题、编号并且能够像图片一样“浮动”（让 \LaTeX 自动寻找最佳位置放置它），你需要将 \verb|tabular| 环境放在 \verb|table| 浮动体环境中。基本语法如下：
+\begin{lstlisting}
+\begin{table}[h!]
+    \centering
+    \caption{一个示例表格}
+    \begin{tabular}{|l|c|r|}
+        \hline
+        表头1 & ... & 表头 n \\ [\hline]
+        表项11 & ... & 表项1n \\ [\hline]
+        ...
+        表项n1 & ... & 表项nn \\ [\hline]
+    \end{tabular}
+    \label{tab:sample}
+\end{table}
+\end{lstlisting}
+
+\begin{itemize}
+    \item \verb|\caption{}|：为表格添加标题。
+    \item \verb|\label{}|：为表格添加表填，之后可以用 \verb|\ref{tab:sample}| 命令来引用这个表格的编号。
+    \item \verb|\centering|：将整个表格居中。
+    \item \verb|[h!]|：这是一个\textbf{位置指示符}，告诉\LaTeX 应该如何放置这个浮动体，常用的位置指示符有：
+    \begin{itemize}
+        \item h(here)：尽可能放在这里
+        \item t(top)：放在页面的顶部
+        \item b(buttom)：放在页面的底部
+        \item p(page)：放在单独的浮动页
+    \end{itemize}
+\end{itemize}
+
+\section{目录基础}
+在 \LaTeX 中创建目录非常简单，而且完全自动化。你不需要手动输入章节名称和页码，\LaTeX 会自动扫描你的文档结构，生成一个完整的、可点击的目录。
+
+创建目录的核心命令只有一个：\verb|\tableofcontents|。你只需要在文档中你希望目录出现的位置（通常在 \verb|\maketitle| 命令之后）插入这个命令即可。
+
+\section{\LaTeX 代码注释}
+单行注释：
+\begin{lstlisting}[title=Latex 代码示例]
+% 注释内容
+\end{lstlisting}
+
+多行注释 1：
+\begin{lstlisting}[title=Latex 代码示例]
+\iffalse
+注释内容
+\fi
+\end{lstlisting}
+
+多行注释 2(使用 \verb|\usepackage{verbatim}|)：
+\begin{lstlisting}[title=Latex 代码示例]
+\begin{comment}
+注释内容
+\end{comment}
+\end{lstlisting}
+
+\section{纸张布局}
+
+\subsection{documentclass}
+语法如下：
+\begin{lstlisting}[title=Latex 代码示例]
+\documentclass[options]{class_name}
+\end{lstlisting}
+\begin{itemize}
+    \item \verb|class_name|：文档类的名称，例如 \verb|article|、\verb|report|或\verb|book|
+    \item \verb|options|：可选参数，用于修改文档类的默认配置，可以使用多个选项，不同选项之间用逗号分隔
+    \begin{itemize}
+        \item 字体大小：设置文档的基础字体大小（例如：\verb|12pt|）
+        \item 纸张大小：设置纸张规格（例如：\verb|a4paper|、\verb|b5paper|）
+        \item 排版模式：\verb|twocolumn|用于双栏排版，\verb|twoside|用于双面排版
+        \item 草稿模式：\verb|draft|会在超出边界的地方用黑线标记，方便检查排版问题
+    \end{itemize}
+\end{itemize}
+
+
+\subsection{geometry 宏包}
+\verb|geometry| 宏包是 \LaTeX 中最强大和灵活的页面布局工具。它可以让你精确地控制纸张大小、页边距、页眉页脚的位置，从而取代文档类自带的粗略设置。
+
+基本语法如下：
+\begin{lstlisting}
+\usepackage[选项1,选项2,...]{geometry}
+\end{lstlisting}
+\begin{itemize}
+    \item 纸张大小
+    \begin{itemize}
+        \item \verb|a4paper|: A4 纸张（默认）。
+        \item \verb|letterpaper|: Letter 纸张。
+        \item \verb|b5paper|: B5 纸张。
+        \item \verb|a3paper|, \verb|a5paper|, \verb|b4paper| 等更多选项。
+    \end{itemize}
+    \item 页边距
+    \begin{itemize}
+        \item \verb|margin=2.5cm|: 设置所有四个边距都为 2.5cm。这是最简洁的用法。
+        \item \verb|left=2cm|, \verb|right=3cm|: 分别设置左右边距。
+        \item \verb|top=2cm|, \verb|bottom=2.5cm|: 分别设置上下边距。
+        \item \verb|hmargin=2.5cm|: 设置水平（左右）边距。
+        \item \verb|vmargin=3cm|: 设置垂直（上下）边距。
+    \end{itemize}
+    \item 页眉和页脚
+    \begin{itemize}
+        \item \verb|headheight=1.2cm|: 设置页眉区域的高度。
+        \item \verb|headsep=0.8cm|: 设置页眉底部与正文顶部的距离。
+        \item \verb|footskip=1cm|: 设置正文底部与页脚顶部的距离。
+    \end{itemize}
+    \item 正文区域大小
+    \begin{itemize}
+        \item \verb|textwidth=15cm|: 设置正文区域的宽度。
+        \item \verb|textheight=22cm|: 设置正文区域的高度。
+        \item \verb|width=15cm|, \verb|height=22cm|: 与 \texttt{textwidth} 和 \texttt{textheight} 相同。
+    \end{itemize}
+\end{itemize}
+
+\section{交叉引用}\label{sec:交叉引用}
+在 \LaTeX 中，交叉引用是一个非常强大的功能，它能让你在文档中自动引用章节、图表、公式和表格的编号，而无需手动管理这些编号。这不仅省去了很多麻烦，还能确保文档在修改时（例如增删章节）编号依然正确。
+
+\LaTeX 的交叉引用主要依赖于两个命令：\verb|\label| 和 \verb|\ref|
+
+\subsection{基本原理}
+\begin{enumerate}
+    \item 定义标签（Label）：你需要在引用的地方使用 \verb|\label{key}| 来设置一个唯一的标签，这里的 \texttt{key} 是自己定义的。
+    \item 引用标签（Reference）：在文档的任何其他地方，可使用 \verb|\ref{key}| 来引用这个标签。\LaTeX 编译时会自动查找 \texttt{key} 对应的编号，并将其插入到 \verb|\ref| 的位置。
+\end{enumerate}
+
+由于编号的生成和引用是一个两步过程，因此你的 \LaTeX 文档通常需要编译两次才能使所有的引用都正确显示。第一次编译时，\LaTeX 会生成一个 \texttt{.aux} 文件，其中包含了所有的标签及其对应的编号信息；第二次编译时，\LaTeX 会读取这个 \texttt{.aux} 文件，用正确的编号替换 \verb|\ref| 命令。
+
+\subsection{基础使用方法}
+可以对以下几种主要对象进行交叉引用：
+
+\textbf{章节}
+
+你可以为任何章节标题设置标签，然后引用它。如下所示：
+\begin{lstlisting}
+\section{简介}
+\label{sec:intro}
+
+这是一个关于章节的例子。正如我们在 \ref{sec:intro} 节中所讨论的，...
+\end{lstlisting}
+
+\textbf{图表}
+
+通常在 \texttt{figure} 或 \texttt{table} 浮动环境中设置标签，注意 \verb|\label| 应该放在 \verb|\caption| 命令的\textbf{后面}。如果放在前面，\verb|\ref| 可能会引用到错误的编号（例如章节编号）。具体例子如下所示：
+\begin{lstlisting}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.7\textwidth]{example-image-a}
+    \caption{一个示例图片}
+    \label{fig:sample} % 放在这里！
+\end{figure}
+
+如图 \ref{fig:sample} 所示，这是一个非常重要的示例。
+\end{lstlisting}
+
+\section{URL}\label{sec:URL}
+最简单的用法为：引用 \texttt{url} 宏包，之后用 \verb|\url{指定的 URL}| 设置 URL 链接。
+
+例如可以用\verb|\url{https://www.bilibili.com/}| 生成 B 站的 URL：\url{https://www.bilibili.com/}
+
+\texttt{URL} 宏包的特点是：
+\begin{itemize}
+    \item 自动处理特殊字符
+    \item 默认使用等宽字体
+    \item 默认不可点击（只显示文本）
+\end{itemize}
+
+为了更好地展示 URL 链接（修改颜色、使其可点击等），我们使用 \verb|hyperref| 宏包，该宏包更加全面，具体内容参考：进阶篇——引用进阶。
+
+\section{图片插入基础}
+
+在插入图片之前，需要引入 \verb|graphicx| 宏包。
+
+插入图片的基本命令是：\verb|\includegraphics[参数]{filename}|。这里的 \texttt{filename} 是图片路径名（绝对路径和相对路径都可以）。注意：传统的 \LaTeX 引擎只支持 \texttt{.eps} 格式。而 \texttt{pdfLaTeX}、\texttt{XeLaTeX}、\texttt{LuaLaTeX} 在此基础上还支持 \texttt{.pdf}、\texttt{.jpg}、\texttt{.png} 格式的图片。
+
+\verb|\includegraphics[参数]{filename}| 中的参数用于指定图片的大小。有以下指定方式：
+\begin{itemize}
+    \item 指定高度和宽度：其中 width 和 height 一般设置为以 cm 为单位
+    \begin{lstlisting}
+\includegraphics[width=..., height=...]{filename}
+    \end{lstlisting}
+    \item 指定相对尺寸
+    \begin{lstlisting}
+% 图片宽度为文本宽度的 a 倍
+\includegraphics[width=a\textwidth]{filename}
+% 图片高度为文本高度的 a 倍
+\includegraphics[height=a\textheight]{filename}
+    \end{lstlisting}
+    \item 保持宽高比：如果只指定了 \texttt{width} 或 \texttt{height} 中的一个，\LaTeX 会自动保持图片的原始宽高比
+\end{itemize}
+
+上面的代码仅能确保图片以一个合适的大小被插入到文档中，如果需要更好地排版文字和图片，通常会把图片放在一个浮动环境中，最常用的是 \texttt{figure} 环境。浮动环境的作用是让 \LaTeX 自动决定图片最佳的放置位置，避免图片将页面分隔得非常突兀。\texttt{figure} 的基本语法如下：
+\begin{lstlisting}
+\begin{figure}[options]
+    \centering
+    \includegraphics[图片大小设置选项]{filename}
+    \caption{这是图片的标题}
+    \label{fig:mylabel}
+\end{figure}
+\end{lstlisting}
+
+\begin{itemize}
+    \item \verb|[options]|：可选参数，用于控制图片在页面上的放置位置。
+    \begin{itemize}
+        \item \texttt{h}：Here，尽量放在代码所在位置。
+        \item \texttt{t}：Top，尽量放在页面的顶部。
+        \item \texttt{b}：Bottom，尽量放在页面的底部。
+        \item \texttt{p}：Page，单独放在一页上。
+        \item \texttt{!}：强制执行，与上述选项结合使用。
+    \end{itemize}
+    \item \verb|centering|：让图片居中。
+    \item \verb|\caption{...}|：为图片添加标题，这个标题会显示在图片下方，并且会出现在图表目录中。
+    \item \verb|label{...}|：为图片设置一个标签，可以方便地在正文中进行交叉引用。
+\end{itemize}
+
+对于如下代码段，可以如下的插入效果：
+\begin{lstlisting}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm, height=3cm]{江景.jpg}
+    \caption{湘江晚霞图}
+    \label{fig:xiangjiangwanxia}
+\end{figure}
+
+湘江晚霞如图 \ref{fig:xiangjiangwanxia} 所示。
+\end{lstlisting}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm, height=3cm]{江景.jpg}
+    \caption{湘江晚霞图}
+    \label{fig:xiangjiangwanxia}
+\end{figure}
+
+湘江晚霞如图 \ref{fig:xiangjiangwanxia} 所示。
+
+\section{数学公式基础}
+
+\subsection{常用宏包}
+为了排版数学公式，最常用的是 \texttt{amsmath} 宏包。当然还有以下常用的宏包：
+\begin{itemize}
+    \item \texttt{amssymb}：提供了一些额外的数学符号。
+    \item \texttt{mathtools}：增强了 \texttt{amsmath} 的功能，提供了更多有用的命令。
+    \item \texttt{bm}：用于在数学模式下让符号加粗。
+\end{itemize}
+
+\subsection{行内公式和行间公式}
+在 \LaTeX 中，数学公式需要放在特定的“数学环境”中。主要有两种类型：行内公式和行间公式。
+\begin{itemize}
+    \item 行内公式：公式与正文在同一行显示。这适用于简单、短小的表达式。
+    \begin{itemize}
+        \item 可用 \verb|$...$| 包围公式。
+        \item 可用 \verb|\(...\)| 包围公式（更推荐）。
+    \end{itemize}
+    \item 行间公式：公式独占一行居中显示（如果需要的话会编号）。这适用于重要或复杂的表达式。
+    \begin{itemize}
+        \item 可用 \verb|$$...$$| 包围公式（一些旧编译器可能不支持）。
+        \item 可用 \verb|\[...\]| 包围公式（推荐）。
+        \item 可用 equation 环境。
+    \end{itemize}
+\end{itemize}
+
+\subsection{数学公式排版基础}
+以下内容可以直接通过键盘输入：
+\begin{itemize}
+    \item 英文字母
+    \item 数字
+    \item \verb|+|、\verb|-|、\verb|=|、\verb|*| 等符号
+\end{itemize}
+
+\subsubsection{上下标}
+\textbf{上标}：使用\quad \textbf{\^}。例如 \verb|x^2| 表示 \(x^2\)。
+
+\textbf{下标}：使用\textbf{\_}。例如 \verb|x_i| 表示 \(x_i\)。
+
+\subsubsection{分数和根式}
+\textbf{分数}：使用 \verb|\frac{分子}{分母}|。例如 \verb|\frac{1}{2}| 表示 \(\frac{1}{2}\)
+
+\textbf{根式}：使用 \verb|\sqrt(expression)|。例如 \verb|\sqrt{b-ac}| 表示 \(\sqrt{b-ac}\)
+
+\subsection{积分、求和和极限}
+
+不定积分公式为 \verb|\int f(x) dx|：
+\[ \int f(x) dx \]
+
+而定积分则表示为：\verb|\int_a^b f(x) dx |，其中 a 表示下界，b 表示上界：
+\[ \int_a^b f(x) dx \]
+
+对于求和，通常形式为：\verb|\sum_{下标}^{上标} 表达式|。例如 \verb|\[ \sum_{i=1}^n i^2\]| 表示：
+\[ \sum_{i=1}^n i^2\]
+
+在行内环境中，求和的上下标会排版在右侧，如 \verb|\( \sum_{i=1}^n i \)| 会表示为：\( \sum_{i=1}^n i \)。若要强制在上下显示，可以在\verb|\sum| 后加上\verb|\limits|。例如 \verb|\( \sum\limits_{i=1}^n i \)| 会表示为：\( \sum\limits_{i=1}^n i \)。
+
+极限公式可以表示为 \verb|\lim_{变量 \to 某个值} 极限式子|，例如 \verb|\lim_{x \to 0} \frac{\sin x}{x}| 可以表示为：
+\[ \lim_{x \to 0} \frac{\sin x}{x}\]
+
+在行内，\verb|\( \lim_{x \to 0} f(x) \)| 表示为：\( \lim_{x \to 0} f(x) \)，如果要强制在上下显示，可以在\verb|\lim| 后加上\verb|\limits|。
+
+\subsection{矩阵和行列式}
+矩阵和行列式的基本格式为：
+\begin{lstlisting}
+\begin{matrix/pmatrix/bmatrix/Bmatrix/vmatrix/Vmatrix}
+a_11 & a_12 & ... & a_1n \\
+...
+a_n1 & a_n2 & ... & a_nn
+\end{matrix/pmatrix/bmatrix/Bmatrix/vmatrix/Vmatrix}
+\end{lstlisting}
+其中：
+\begin{itemize}
+    \item \texttt{matrix}：不带任何括号。
+    \item \texttt{pmatrix}：圆括号。
+    \item \texttt{bmatrix}：方括号。
+    \item \texttt{Bmatrix}：大括号。
+    \item \texttt{vmatrix}：单竖线，通常用于行列式。
+    \item \texttt{Vmatrix}：双竖线，通常用于行列式。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\[
+\begin{Vmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 9
+\end{Vmatrix}
+\]
+\end{lstlisting}
+
+表示：
+\[
+\begin{Vmatrix}
+1 & 2 & 3 \\
+4 & 5 & 6 \\
+7 & 8 & 9
+\end{Vmatrix}
+\]
+
+\subsection{多行公式}
+
+\subsubsection{align}
+\texttt{align} 环境可以对齐多行公式，并为每一行自动编号，如果不需要对公式进行编号，可以使用 \texttt{align*} 环境。此外\verb|\align| 允许通过 \verb|&| 符号指定对齐点。通过插入多个 \verb|&| 符号，你可以创建多列公式，每列独立对齐。
+语法为：
+\begin{lstlisting}
+\begin{align/align*}
+公式1 \\
+公式2 \\
+...
+公式n
+\end{align/align*}
+\end{lstlisting}
+
+例如：
+\begin{lstlisting}
+\begin{align*}
+2x + 3y = 5 \\
+4x - y = 3
+\end{align*}
+
+\begin{align}
+  x &= 1+2 & y &= \sin(\theta) \\
+  x' &= 3+4 & y' &= \cos(\phi)
+\end{align}
+\end{lstlisting}
+
+表示：
+\begin{align*}
+2x + 3y = 5 \\
+4x - y = 3
+\end{align*}
+
+\begin{align}
+  x &= 1+2 & y &= \sin(\theta) \\
+  x' &= 3+4 & y' &= \cos(\phi)
+\end{align}
+
+\subsubsection{split}
+当单个公式太长需要换行，但你希望它只获得一个编号时，应使用 \texttt{split} 环境。
+\begin{itemize}
+    \item \texttt{split} 必须嵌套在带编号的公式环境（如 \texttt{equation} 或 \texttt{gather}）内部。
+    \item 每行公式中最多只有一个对齐点 \verb|&|。
+    \item 编号会居中放置在所有行的垂直中心。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\begin{equation}
+\begin{split}
+  V &= \int_D \left( f(x, y) + g(x, y) \right) \, \mathrm{d}A \\
+  &= \int_a^b \int_c^d f(x, y) \, \mathrm{d}y \, \mathrm{d}x + \text{剩余项}
+\end{split}
+\end{equation}
+\end{lstlisting}
+
+效果为：
+\begin{equation}
+\begin{split}
+  V &= \int_D \left( f(x, y) + g(x, y) \right) \, \mathrm{d}A \\
+  &= \int_a^b \int_c^d f(x, y) \, \mathrm{d}y \, \mathrm{d}x + \text{剩余项}
+\end{split}
+\end{equation}
+
+\subsubsection{gather}
+用于将多行公式居中堆叠，每行公式独立编号。
+例如：
+\begin{lstlisting}
+\begin{gather}
+  E = mc^2 \\
+  \nabla \cdot \mathbf{D} = \rho \\
+  \text{其他公式}
+\end{gather}
+\end{lstlisting}
+
+效果为：
+\begin{gather}
+  E = mc^2 \\
+  \nabla \cdot \mathbf{D} = \rho \\
+  \text{其他公式}
+\end{gather}
+
+\subsubsection{multiline}
+专为超长公式设计，它自动将第一行左对齐，最后一行右对齐，中间行居中，且只在最后一行编号。
+
+例如：
+\begin{lstlisting}
+\begin{multline}
+  \frac{\partial}{\partial t} \int_{\Omega} \mathbf{D} \cdot \mathbf{B} \, \mathrm{d}V = \iint_{\partial \Omega} (\mathbf{E} \times \mathbf{H}) \cdot \mathrm{d}\mathbf{S} \\
+  + \int_{\Omega} \left( \mathbf{J} \cdot \mathbf{E} + \mathbf{M} \cdot \mathbf{H} \right) \, \mathrm{d}V
+\end{multline}
+\end{lstlisting}
+
+效果为：
+\begin{multline}
+  \frac{\partial}{\partial t} \int_{\Omega} \mathbf{D} \cdot \mathbf{B} \, \mathrm{d}V = \iint_{\partial \Omega} (\mathbf{E} \times \mathbf{H}) \cdot \mathrm{d}\mathbf{S} \\
+  + \int_{\Omega} \left( \mathbf{J} \cdot \mathbf{E} + \mathbf{M} \cdot \mathbf{H} \right) \, \mathrm{d}V
+\end{multline}
+
+\subsubsection{cases}
+此外，还可以用 cases 环境定义分段函数。语法如下：
+\begin{lstlisting}
+\begin{cases}
+    \text{第一段函数的表达式} & \text{第一段函数适用的条件} \\
+    \text{第二段函数的表达式} & \text{第二段函数适用的条件} \\
+    ...
+    \text{第n段函数的表达式} & \text{第n段函数适用的条件}
+\end{cases}
+\end{lstlisting}
+
+例如：
+\begin{lstlisting}
+\[
+f(x) =
+\begin{cases}
+x^2 & \text{if } x \geq 0 \\
+-x^2 & \text{if } x < 0
+\end{cases}
+\]
+\end{lstlisting}
+
+表示：
+\[
+f(x) =
+\begin{cases}
+x^2 & \text{if } x \geq 0 \\
+-x^2 & \text{if } x < 0
+\end{cases}
+\]
+
+\subsection{公式编号与引用}
+使用 \texttt{equation} 环境可以为公式自动编号，并可以为其添加标签以便交叉引用。语法如下
+\begin{lstlisting}
+\begin{equation}
+    公式
+    \label{标签}
+\end{equation}
+\end{lstlisting}
+
+例如：
+\begin{lstlisting}
+\begin{equation}
+    E=mc^2
+    \label{eq:einstein}
+\end{equation}
+
+质能方程如公式 \eqref{eq:einstein} 所示。
+\end{lstlisting}
+
+表示：
+\begin{equation}
+    E=mc^2
+    \label{eq:einstein}
+\end{equation}
+
+质能方程如公式 \eqref{eq:einstein} 所示。
+
+
+
+
+% -------------------------------------------------------------------------------
+
+% 进阶篇从这里开始，作为第二个章节（chapter）
+\chapter{进阶篇}\label{ch:2}
+
+\section{字体控制进阶}
+
+\subsection{字体颜色}
+在 \LaTeX 中控制字体颜色主要依赖于 \texttt{xcolor} 宏包。而 \texttt{xcolor} 提供了几种改变颜色的方法：
+\begin{itemize}
+    \item \verb|\textcolor{color}{text}|：将 \texttt{text} 的颜色改为 \texttt{color}。例如 \verb|\textcolor{red}{这一句话是红色的}| 的效果为： \textcolor{red}{这一句话是红色的}。
+    \item \verb|{\color{color}text}|：将 \texttt{text} 的颜色改为 \texttt{color}。例如 \verb|{\color{blue}这句话是蓝色的}| 的效果为：{\color{blue}这一句话是蓝色的}。
+\end{itemize}
+
+前面我们使用的 \texttt{blue}、\texttt{red} 都是 \texttt{xcolor} 的预定义颜色。当然我们可以通过 \verb|\definecolor| 自己定义颜色。具体语法如下：
+\begin{lstlisting}
+\definecolor{name}{model}{spec}
+\end{lstlisting}
+
+\begin{itemize}
+    \item \texttt{name}：新颜色的名字。
+    \item \texttt{model}：颜色模型，例如 \texttt{rgb}、\texttt{cmyk}、\texttt{HTML} 等。
+    \item \texttt{spec}：颜色的数值。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\definecolor{mypurple}{RGB}{127, 18, 255}
+\textcolor{mypurple}{这是我定义的紫色}
+\end{lstlisting}
+
+效果为：
+
+\definecolor{mypurple}{RGB}{127, 18, 255}
+\textcolor{mypurple}{这是我定义的紫色}
+
+\subsection{fontspec 使用}
+\texttt{fontspec} 提供了几个核心命令来设置文档的字体：
+\begin{itemize}
+    \item \verb|\setmainfont{font_name}|：设置文档的主字体（通常是衬线字体）。
+    \item \verb|\setsansfont{font_name}|：设置无衬线字体。
+    \item \verb|\setmonofont{font_name}|：设置等宽字体。
+\end{itemize}
+
+有时普通字体、加粗字体、斜体字体可能要求不是同一种字体，此时我们可以为字体添加额外的参数实现上述功能。代码如下（以设置正文字体为例）：
+\begin{lstlisting}
+\setmainfont{Times New Roman}[
+    BoldFont = {字体1},
+    ItalicFont = {字体2},
+    SmallCapsFont = {字体3}
+]
+\end{lstlisting}
+
+和设置文本颜色类似，可以用 \verb|{\fontspec{font_type} text| 让 \texttt{text} 使用 \texttt{font\_type} 字体。
+
+如果需要同时修改字体和颜色，可以参考以下示例：
+\begin{lstlisting}
+% 字体为 Arial、颜色为 mypurple
+\textcolor{mypurple}{\fontspec{Arial} Arial is purple.}
+\end{lstlisting}
+
+\section{引用进阶}
+
+\subsection{hyperref}
+\texttt{hyperref} 的核心功能是为 \LaTeX 文档生成可点击的超链接。它可以自动识别文档中的各种引用、目录、URL 和电子邮件地址，并将它们转换为交互式的链接，极大地提升了 PDF 文档的可用性。使用前需要用 \verb|\usepackage[选项]{hyperref}| 加载宏包。一旦加载该宏包，\verb|hyperref| 会自动完成以下设置：
+\begin{itemize}
+    \item 目录：\verb|\tablecontents| 生成的目录项将变为可点击的链接，可以直接跳转到对应章节。
+    \item 交叉引用：所有使用 \verb|\ref|、\verb|\pageref|、\verb|\cite| 和 \verb|\eqref| 的引用都会变为链接。
+    \item 页码：\verb|\pageref| 引用的页码也会变为链接。
+    \item URL 和邮箱：使用 \verb|\url| 和 \verb|\href| 命令常见的链接都会生效。
+\end{itemize}
+
+\verb|\hyperref| 提供了丰富的选项来定制链接的样式和行为，常用选项有：
+\begin{itemize}
+    \item \texttt{colorlinks=true}：让链接以颜色高亮。
+    \item \texttt{linkcolor}：内部链接的颜色，比如章节、图表和公式的引用。
+    \item \texttt{filecolor}：指向本地文件的链接颜色。
+    \item \texttt{urlcolor}：URL 链接的颜色。
+    \item \texttt{citecolor}：引文（bibliography）链接的颜色。
+    \item \texttt{pdfpagemode=UseOutlines}：让 PDF 打开时自动显示书签（大纲）。
+    \item \texttt{bookmarks=true}：创建 PDF 书签。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\usepackage[
+    colorlinks=true,
+    linkcolor=pink,
+    urlcolor=purple,
+    citecolor=green
+]{hyperref}
+\end{lstlisting}
+
+\subsection{cleveref}
+它的主要作用是根据引用的类型自动添加描述性文字，从而让文档中的交叉引用更加自然和清晰。使用时需要加载 \texttt{cleveref} 宏包。但是在加载时需要注意：\texttt{cleveref} 必须在 \texttt{hyperref} 之后加载。
+
+\subsubsection{cleveref 基本使用}
+\texttt{cleveref} 的核心命令是 \verb|\cref{label}|。它会根据 label 的前缀来判断引用类型，并自动生成正确的引用文本。
+
+常用的标签有：
+\begin{itemize}
+    \item \texttt{sec}：section
+    \item \texttt{fig}：figure
+    \item \texttt{tab}：table
+    \item \texttt{eq}：equation
+    \item \texttt{ch}：chapter
+\end{itemize}
+
+例如使用：\verb|\cref{ch:2}| 可以产生一个指向第二章的引用：\cref{ch:2}。
+
+\subsubsection{cleveref 进阶使用}
+多重引用：可以一次引用多个标签，\texttt{cleveref} 会自动将它们合并成一个简洁的列表，并处理单数和复数形式，语法如下：
+\begin{lstlisting}
+\cref{标签1,标前2,...,标签n}
+\end{lstlisting}
+
+例如我在文档中定义了两个标签：
+\begin{lstlisting}
+\label{sec:交叉引用}
+\label{sec:URL}
+\end{lstlisting}
+
+使用：\verb|\cref{sec:交叉引用,sec:URL}| 可以产生一个 “指向交叉引用” 和 “URL” section 的引用：\cref{sec:交叉引用,sec:URL}
+
+自定义引用格式：可以修改 \texttt{cref} 的默认描述文本，语法如下：
+\begin{lstlisting}
+\crefname{标签类型}{单数描述}{复数描述}
+\end{lstlisting}
+
+例如使用：
+\begin{lstlisting}
+\crefname{section}{章节}{章节}
+\end{lstlisting}
+
+\crefname{section}{章节}{章节}
+此时再使用 \verb|\cref{sec:交叉引用,sec:URL}|，产生的效果为：\cref{sec:交叉引用,sec:URL}。
+
+\section{表格插入进阶}
+
+\subsection{multirow 宏包}
+在复杂的表格中，经常需要合并行或列的单元格，这主要依赖于 \texttt{multirow} 宏包。使用前需要使用 \verb|\usepackage{multirow}| 进行加载。
+
+\subsubsection{合并列}
+\verb|\multicolumn| 命令用于合并列，并允许你重新定义合并后的对齐方式和边界。语法如下：
+\begin{lstlisting}
+\multicolumn{num}{format}{text}
+\end{lstlisting}
+
+\begin{itemize}
+    \item \texttt{num}：要合并的列数。
+    \item \texttt{format}：合并后的列格式（例如 \texttt{l}、\texttt{c}、\texttt{r} 等）。
+    \item \texttt{text}：合并后单元格的内容。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{\textbf{学生 A 面试评分}} \\ \hline
+90.12 & 89.14 & 93.11 \\ \hline
+\end{tabular}
+\end{lstlisting}
+
+会产生如下效果：
+
+\begin{tabular}{|c|c|c|}
+\hline
+\multicolumn{3}{|c|}{\textbf{学生 A 面试评分}} \\ \hline
+90.12 & 89.14 & 93.11 \\ \hline
+\end{tabular}
+
+\subsubsection{合并行}
+\verb|\multirow| 命令用于合并行，语法如下：
+\begin{lstlisting}
+\multirow{num rows}{width}{text}
+\end{lstlisting}
+
+\begin{itemize}
+    \item \texttt{num rows}：要合并的行数。
+    \item \texttt{width}：单元格的宽度。
+        \begin{itemize}
+            \item 使用 \texttt{*} 表示自适应宽度。
+        \end{itemize}
+    \item \texttt{text}：合并后单元格的内容。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\begin{tabular}{|c|c|}
+\hline
+\multirow{2}{*}{\textbf{合并}} & A \\ \cline{2-2}
+& B \\ \hline
+\end{tabular}
+\end{lstlisting}
+
+会产生如下效果：
+
+\begin{tabular}{|c|c|}
+\hline
+\multirow{2}{*}{\textbf{合并}} & A \\ \cline{2-2}
+& B \\ \hline
+\end{tabular}
+
+一般来说，\verb|\multirow| 命令会和 \verb|\cline{i-j}| 一起使用。\verb|\cline{i-j}| 的功能为：
+\begin{itemize}
+    \item 只在指定的列范围（i 到 j）内绘制水平线。
+    \item 不会跨越整个表格，适合在合并单元格后局部画线。
+\end{itemize}
+
+
+
+\subsection{array 宏包}
+使用 \verb|\usepackage{array}| 加载 array 宏包后，可以使用以下方法控制换行和对齐方式
+\begin{itemize}
+    \item \verb|p{width}|：顶部对齐（默认）。
+    \item \verb|m{width}|：居中对齐（垂直居中）。
+    \item \verb|b{width}|：底部对齐。
+    \item 优先级：\texttt{b\{width\}} > \texttt{p\{width\}} > \texttt{m\{width\}}。
+\end{itemize}
+
+注意：\texttt{tabular} 环境在对齐表格中的所有行时，遵循一个原则：整行内容是相对于这一行中最高的单元格进行对齐的。因此，如果混用 \texttt{p\{width\}}、\texttt{m\{width\}}、\texttt{b\{width\}}，那么可能会造成意想不到的错误。
+
+例如
+\begin{lstlisting}
+\begin{tabular}{|b{2cm}|m{4cm}|p{6cm}|}
+\hline
+\textbf{底部对齐} & \textbf{居中对齐} & \textbf{顶部对齐} \\ \hline
+这是一个很长的描述，它需要跨越多行，但左边的内容会垂直居中。 
+& 这是一个很长的描述，它需要跨越多行，但左边的内容会垂直居中。
+& 这是一个很长的描述，它需要跨越多行，但左边的内容会垂直居中。\\ \hline
+\end{tabular}
+\end{lstlisting}
+
+\begin{tabular}{|b{2cm}|m{4cm}|p{6cm}|}
+\hline
+\textbf{底部对齐} & \textbf{居中对齐} & \textbf{顶部对齐} \\ \hline
+这是一个很长的描述，它需要跨越多行，但左边的内容会垂直居中。 & 这是一个很长的描述，它需要跨越多行，但左边的内容会垂直居中。& 这是一个很长的描述，它需要跨越多行，但左边的内容会垂直居中。\\ \hline
+\end{tabular}
+
+\subsection{booktabs 宏包}
+基础表格的线条通常很粗且呆板。使用 \texttt{booktabs} 宏包可以创建出具有专业学术风格的、没有垂直线的表格。使用前需要用 \verb|\usepackage{booktabs}| 加载宏包。\texttt{booktabs} 支持的线条类型有：
+\begin{itemize}
+    \item \verb|\toprule|：表格顶部的粗线。
+    \item \verb|\midrule|：表格中部的中等粗细线。
+    \item \verb|\bottomrule|：表给底部的粗线。
+    \item \verb|\cmidrule[thickness](trim){i-j}|
+    \begin{itemize}
+        \item \texttt{thickness}：线条粗细（例如：0.5pt）
+        \item \texttt{trim}：端点修剪
+        \begin{itemize}
+            \item \texttt{l}：将线条的左侧稍微缩进一点
+            \item \texttt{r}：将线条的右侧稍微缩进一点
+        \end{itemize}
+        \item \texttt{i-j}（必选）：只画第 i 列到第 j 列之间的中等粗细横线
+    \end{itemize}
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{实验组} & \multicolumn{2}{c}{对照组} \\
+\cmidrule(r){2-3} \cmidrule(l){4-5}
+方法 & 准确率 & 召回率 & 准确率 & 召回率 \\
+\midrule
+A & 0.92 & 0.88 & 0.85 & 0.80 \\
+B & 0.95 & 0.91 & 0.87 & 0.83 \\
+\bottomrule
+\end{tabular}
+\end{lstlisting}
+
+效果如下：
+
+\begin{tabular}{lcccc}
+\toprule
+& \multicolumn{2}{c}{实验组} & \multicolumn{2}{c}{对照组} \\
+\cmidrule(r){2-3} \cmidrule(l){4-5}
+方法 & 准确率 & 召回率 & 准确率 & 召回率 \\
+\midrule
+A & 0.92 & 0.88 & 0.85 & 0.80 \\
+B & 0.95 & 0.91 & 0.87 & 0.83 \\
+\bottomrule
+\end{tabular}
+
+\section{图片插入进阶}
+
+\subsection{并排显示图片}
+如果需要将多张图片放在一个 \texttt{figure} 环境里面，并且每张图片都有自己的小标题，此时需要用到 \texttt{subcaption} 宏包。故需要用 \verb|\usepackage{subcaption}| 引入宏包。
+
+语法如下：
+\begin{lstlisting}
+\begin{figure}[位置参数]
+    \centering
+    \begin{subfigure}[对齐方式]{宽度}
+        \centering
+        \includegraphics[子图宽度]{图片文件}
+        \caption{子图标题}
+        \label{子图标签}
+    \end{subfigure}
+    \hfill % 或 \quad, \qquad, \hspace{...} 添加水平间距
+    \begin{subfigure}[对齐方式]{宽度}
+        ...
+    \end{subfigure}
+    \caption{主图标题}
+    \label{主图标签}
+\end{figure}
+\end{lstlisting}
+
+\begin{itemize}
+    \item 位置参数：
+    \begin{itemize}
+        \item \texttt{h}：here
+        \item \texttt{t}：top
+        \item \texttt{b}：bottom
+        \item \texttt{p}：page
+    \end{itemize}
+    \item 对齐方式：
+    \begin{itemize}
+        \item \texttt{t}：顶部对齐
+        \item \texttt{b}：底部对齐
+        \item \texttt{c}：居中对齐
+    \end{itemize}
+    \item 宽度：指定子图环境的宽度
+    \item \verb|\hfill|：在子图之间添加弹性水平间距，使它们分别靠左和靠右
+    \item 子图宽度：一般设置为：\verb|width=linewidth|
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{统计图1.png}
+        \caption{10000次掷骰子结果统计图}
+        \label{fig:touzi1}
+    \end{subfigure}
+    \hfill % 在两个 subfigure 之间添加水平空间
+        \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{统计图2.png}
+        \caption{100000次掷骰子结果统计图}
+        \label{fig:touzi2}
+    \end{subfigure}
+    \caption{掷骰子实验结果统计}
+    \label{fig:main}
+\end{figure}
+\end{lstlisting}
+
+效果为：
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{统计图1.png}
+        \caption{10000次掷骰子结果统计图}
+        \label{fig:touzi1}
+    \end{subfigure}
+    \hfill % 在两个 subfigure 之间添加水平空间
+        \begin{subfigure}[b]{0.4\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{统计图2.png}
+        \caption{100000次掷骰子结果统计图}
+        \label{fig:touzi2}
+    \end{subfigure}
+    \caption{掷骰子实验结果统计}
+    \label{fig:main}
+\end{figure}
+
+\subsection{图片跨双栏}
+如果文档是双栏排版的，但某张图片需要占据整个页面宽度，则必须使用带星号的 \texttt{figure*} 环境。它通常会放在页面的顶部或单独一页。语法如下：
+\begin{lstlisting}
+\begin{figure*}
+    \centering
+    \includegraphics[图片大小]{图片路径}
+    \caption{图片标题}
+    \label{标签}
+\end{figure*}
+\end{lstlisting}
+ 
+\section{tcolorbox}
+\texttt{tcolorbox} 是 \LaTeX 中一个功能极其强大和灵活的工具，专门用于创建带有背景色、边框、标题和阴影的彩色盒子。它极大地简化了美观提示、定义、定理、代码框等复杂环境的创建。
+
+\subsection{创建单个盒子}
+创建单个盒子的语法为：
+\begin{lstlisting}
+\begin{tcolorbox}[选项]
+文本内容
+\end{tcolorbox}
+\end{lstlisting}
+
+常用选项如下：
+\begin{itemize}
+    \item 颜色：
+    \begin{itemize}
+        \item \texttt{colback}：背景色。
+        \item \texttt{colframe}：边框色。
+        \item \texttt{coltitle}：标题颜色。
+    \end{itemize}
+    \item 边框：
+    \begin{itemize}
+        \item \texttt{boxrule}：边框粗细。
+        \item \texttt{sharp corners}：使用直角（默认圆角）。
+        \item \texttt{arc}：边框圆角的半径。
+    \end{itemize}
+    \item 标题：
+    \begin{itemize}
+        \item \texttt{title}：标题文本
+        \item \texttt{fonttitle}：标题字体样式
+    \end{itemize}
+    \item 尺寸：
+    \begin{itemize}
+        \item \texttt{width}：强制设置盒子固定宽度
+        \item \texttt{auto adjust textwidth=true}：让盒子自动适应文本宽度
+    \end{itemize}
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\begin{tcolorbox}[
+    colback=red!5!white,          % 背景色：5% 红色 + 95% 白色 (淡红)
+    colframe=red!75!black,        % 边框色：75% 红色 + 25% 黑色 (深红)
+    title=\textbf{注意 (Attention)},    % 盒子标题，自动居中
+    boxrule=1.5pt,                % 边框粗细
+    sharp corners,                % 边框使用直角 (默认是圆角)
+]
+    这个盒子用来强调重要的信息。
+\end{tcolorbox}
+\end{lstlisting}
+
+效果为：
+
+\begin{tcolorbox}[
+    colback=red!5!white,          % 背景色：5% 红色 + 95% 白色 (淡红)
+    colframe=red!75!black,        % 边框色：75% 红色 + 25% 黑色 (深红)
+    title=\textbf{注意 (Attention)},    % 盒子标题，自动居中
+    boxrule=1.5pt,                % 边框粗细
+    sharp corners,                % 边框使用直角 (默认是圆角)
+]
+    这个盒子用来强调重要的信息。
+\end{tcolorbox}
+
+\subsection{创建自定义可重复盒子}
+在文档中，通常需要多次使用相同样式的盒子。最佳实践是使用 \verb|\newtcolorbox| 在导言区定义一个盒子。语法为：
+\begin{lstlisting}
+% 现阶段先不考虑参数的用法
+\newtcolorbox{盒子名称}[参数的数量][默认参数]{选项}
+\end{lstlisting}
+
+使用语法为：
+\begin{lstlisting}
+\begin{盒子名称}
+文本内容
+\end{盒子名称}
+\end{lstlisting}
+
+\section{算法表示}
+为了在 \LaTeX 文档中清晰地表示算法，通常使用 \texttt{algorithm2e}。
+
+使用前需要在导言区用 \verb|\usepackage[ruled, linesnumbered]{algorithm2e}| 加载宏包。
+\begin{itemize}
+    \item \texttt{ruled}：为算法添加顶部和底部的横线。
+    \item \texttt{linesnumbered}：为每一行代码添加行号。
+\end{itemize}
+
+之后就可以用 \texttt{algorithm} 环境来编写算法。语法如下：
+\begin{lstlisting}
+\begin{algorithm}
+    \caption{算法标题}
+    \label{标签}
+    \KwData{输入}
+    \KwResult{输出}
+
+    算法伪代码
+\end{algorithm}
+\end{lstlisting}
+
+算法伪代码中常用命令如下：
+\begin{itemize}
+    \item \verb|\BlankLine|：插入一个空白行，用于视觉分组。
+    \item \verb|\tcp{...}|：注释。
+    \item \verb|\KwSty{...}|：手动设置粗体关键字。
+    \item \verb|\KwTo|：for 循环中表示 “到”。
+    \item \verb|\If{condition}{if-statement}\Else{else-statement}|：条件判断。
+    \item \verb|\While{condition}{while-statement}|：while 循环。
+    \item \verb|\For{init; cond; step}{for-statement}|：for 循环。
+    \item \verb|\Foreach{item \KwIn list}{for-each-statement}|：for-each 循环。
+    \item \verb|Repeat{statement}\Until{condition}|：repeat 循环。
+    \item \verb|\Function{Name}{Params}{function-body}|：函数。
+    \item \verb|\Return{...}|：返回值。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\begin{algorithm}[h!]
+    \SetAlgoLined % 结构块带线
+    \caption{迭代斐波那契数列}
+    \label{alg:fibonacci_iter}
+
+    \KwIn{非负整数 $n$}
+    \KwOut{斐波那契数列的第 $n$ 项 $F_n$}
+
+    \If{$n \leq 1$}{
+        \Return{$n$}\;
+    }
+
+    $a \leftarrow 0$\;
+    $b \leftarrow 1$\;
+    $i \leftarrow 2$\;
+
+    \While{$i \leq n$}{
+        $temp \leftarrow a + b$\;
+        $a \leftarrow b$\;
+        $b \leftarrow temp$\;
+        $i \leftarrow i + 1$\;
+    }
+    
+    \Return{$b$}\;
+
+\end{algorithm}
+\end{lstlisting}
+
+产生如下效果：
+
+\begin{algorithm}[h!]
+    \SetAlgoLined % 结构块带线
+    \caption{迭代斐波那契数列}
+    \label{alg:fibonacci_iter}
+    \KwIn{非负整数 $n$}
+    \KwOut{斐波那契数列的第 $n$ 项 $F_n$}
+    \If{$n \leq 1$}{
+        \Return{$n$}\;
+    }
+    $a \leftarrow 0$\;
+    $b \leftarrow 1$\;
+    $i \leftarrow 2$\;
+    \While{$i \leq n$}{
+        $temp \leftarrow a + b$\;
+        $a \leftarrow b$\;
+        $b \leftarrow temp$\;
+        $i \leftarrow i + 1$\;
+    }
+    \Return{$b$}\;
+\end{algorithm}
+
+\section{代码块}
+可以使用 \texttt{listings} 宏包来插入代码块。
+
+使用前需要在导言区用 \verb|\usepackage{listings}| 加载宏包。
+
+\subsection{插入简单代码}
+对于行内代码，可以用 \verb|\lstinline{代码}| 完成插入。例如 \verb|\lstinline{int x = 1;}| 的效果为：\lstinline{int x = 1;}
+
+更常用的是独立代码块，语法如下：\verb|\begin{lstlisting} 代码 \end{lstlisting}|。此处的代码可以换行。
+
+\subsection{全局设置}
+有时我们会重复用到一个代码块样式，此时可以通过 \verb|\lstset{}| 全局设置样式。常见设置如下：
+\begin{itemize}
+    \item \texttt{basicstyle}：基础字体款式（例如：\verb|\ttfamily\small|）
+    \item \texttt{keywordstyle}：关键字颜色
+    \item \texttt{commmentstyle}：注释样式
+    \item \texttt{stringstyle}：字符串颜色
+    \item \texttt{numbers}：行号的位置（left 或 right）
+    \item \texttt{numberstyle}：行号样式
+    \item \texttt{frame}：添加边框
+    \item \texttt{tabsize}：Tab 等于多少个空格
+    \item \texttt{breaklines}：自动换行
+    \item \texttt{language}：默认编程语言
+    \item \texttt{captionpos}：标题位置
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray}\itshape,
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    frame=single,
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=false,
+    showspaces=false,
+    showstringspaces=false,
+    language=Python,
+    captionpos=b,
+    escapeinside={(*@}{@*)},
+}
+\end{lstlisting}
+
+\subsection{从外部文件插入代码}
+语法如下：
+\begin{lstlisting}
+\lstinputlisting[language=编程语言, caption={标题}]{代码源文件位置}
+\end{lstlisting}
+
+\section{数学公式进阶}
+
+\subsection{数理逻辑}
+大部分逻辑符号都可以通过基本的 \LaTeX 数学环境或结合 \texttt{amssymb}、\texttt{amsmath} 来实现。使用前需要导入宏包。常见的符号有：
+\begin{itemize}
+    \item \verb|\neg|：$\neg$
+    \item \verb|\land|：$\land$
+    \item \verb|\lor|：$\lor$
+    \item \verb|\oplus|：$\oplus$
+    \item \verb|\to|：$\to$
+    \item \verb|\implies|：$\implies$
+    \item \verb|\leftrightarrow|：$\leftrightarrow$
+    \item \verb|\iff|：$\iff$
+    \item \verb|\forall|：$\forall$
+    \item \verb|\exists|：$\exists$
+    \item \verb|\exists!|：$\exists!$
+    \item \verb|\nexists|：$\nexists$
+    \item \verb|\vdash|：$\vdash$
+    \item \verb|\models|：$\models$
+    \item \verb|\because|：$\because$
+    \item \verb|\therefore|：$\therefore$
+\end{itemize}
+
+\subsection{导数和微分}
+
+\subsubsection{基础的微分符号}
+\begin{itemize}
+    \item \verb|\mathrm{d}x|：$\mathrm{d}x$
+    \item \verb|\partial x|：$\partial x$
+\end{itemize}
+
+\subsubsection{导数的莱布尼茨记法}
+\begin{itemize}
+    \item \verb|$\frac{\mathrm{d} y}{\mathrm{d} x}$|：$\frac{\mathrm{d} y}{\mathrm{d} x}$
+    \item \verb|$\frac{\mathrm{d}^n y}{\mathrm{d} x^n}$|：$\frac{\mathrm{d}^n y}{\mathrm{d} x^n}$
+    \item \verb|\frac{\partial f}{\partial x}|：$\frac{\partial f}{\partial x}$
+    \item \verb|\frac{\partial^n f}{\partial x^n}|：$\frac{\partial f}{\partial x}$
+    \item \verb|\frac{\partial^2 f}{\partial x \partial y}|：$\frac{\partial^2 f}{\partial x \partial y}$
+\end{itemize}
+
+对于导数在特定点的值，可以使用定界符 \verb|\left.| 和 \verb+\right|_+。
+\begin{itemize}
+    \item \verb|\left.|：是一个空的左定界符，确保右侧的 \texttt{|} 能够正确垂直拉伸。
+    \item \verb+\right|_+：会生成一个垂直线，并在其底部添加下标。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+\left.\frac{\mathrm{d}f}{\mathrm{d}x}\right|_{x=a} = 2a
+\end{lstlisting}
+
+表示：
+$$\left.\frac{\mathrm{d}f}{\mathrm{d}x}\right|_{x=a} = 2a$$
+
+\subsubsection{导数的拉格朗日记法}
+\begin{itemize}
+    \item \verb|f'(x)|：$f'(x)$
+    \item \verb|f''(x)|：$f''(x)$
+    \item \verb|f^{(n)}(x)|：$f^{(n)}(x)$
+\end{itemize}
+
+对于导数在 $x_0$ 的值，直接将 $x$ 替换为 $x_0$ 即可。
+
+\subsection{自定义符号}
+最基本的自定义命令的语法如下：
+\begin{lstlisting}
+\newcommand{命令名称}[参数个数][参数默认值]{被替换的代码（可能包含被替换的内容）}
+\end{lstlisting}
+
+\begin{itemize}
+    \item 参数在被替换的代码中以 \verb|#1|，\verb|#2|，... 的形式引用。
+    \item 总参数个数：包含可选参数在内的所有参数数量。
+    \item 默认值：可选参数的默认值。
+\end{itemize}
+
+\newcommand{\R}{$\mathbb{R}$}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+
+例如：
+\begin{itemize}
+    \item \verb|\newcommand{\R}{$\mathbb{R}$}|：此后可以用 \verb|\R| 表示 \R。
+    \item \verb|\newcommand{\set}[1]{\left\{ #1 \right\}}|：此后可以用 \verb|\set{集合元素}| 表示集合。例如：\verb|\set{1, 2, 3, 4, 5}| 表示 $\set{1, 2, 3, 4, 5}$。
+\end{itemize}
+
+如果我们定义了一个已经存在的命令，就会出现错误，为避免该错误，可用 \verb|\providecommand|。它只会在命令尚未定义时创建它，否则不做任何操作。语法如下：
+\begin{lstlisting}
+\providecommand{命令名称}[参数个数]{替换内容}
+\end{lstlisting}
+
+有时我们需要修改一个已存在的命令（例如修改 \verb|\chapter|、\verb|\section| 的外观，或者替换一个简单的符号），此时需要使用 \verb|\renewcommand|，语法如下。
+\begin{lstlisting}
+\renewcommand{已存在命令名称}[参数个数]{新替换内容}
+\end{lstlisting}
+
+例如可以使用下面命令将无序列表符号从圆形改为方块：
+\begin{lstlisting}
+\renewcommand{\labelitemi}{\ensuremath{\blacksquare}}
+\end{lstlisting}
+
+\subsection{公式中的文本}
+最常用且推荐的在数学公式中插入文本的命令是 \verb|\text{...}|，使用前需要加载 \verb|amsmath| 宏包。它有如下特点：
+\begin{itemize}
+    \item 字体切换：\verb|\text{...}| 会暂时跳出数学模式，切换回当前环境下的文本字体。这意味着它会保持正常的文本样式、粗细和大小。
+    \item 保留空格：\verb|\text{...}| 内部的空格会被保留。
+    \item 自动调整大小：在上下标或分数中，\verb|\text| 内部的字体大小会根据上下文自动缩放。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+$$
+\sum_{i=1}^n \left( \frac{1}{i^2} \right) \quad \text{和} \quad \sum_{i=1}^{n \text{ 偶数}} \left( \frac{1}{i^2} \right)
+$$
+\end{lstlisting}
+
+效果为：
+$$
+\sum_{i=1}^n \left( \frac{1}{i^2} \right) \quad \text{和} \quad \sum_{i=1}^{n \text{ 偶数}} \left( \frac{1}{i^2} \right)
+$$
+
+\subsection{符号和字体的精细控制}
+
+\subsubsection{常规数学字体}
+在数学模式中，变量默认是斜体，而函数名和单位默认是正体。为了更好地排版，\LaTeX 提供了一系列命令来手动切换数学公式中字母和数字的字体样式。
+\begin{itemize}
+    \item \verb|\mathrm{...}|（罗马正体）：用于微分符号、单位、或自定义函数名。例如 \verb|\mathrm{d}x| 的效果为：$\mathrm{d}x$a。
+    \item \verb|\mathbf{...}|（数字粗体）：用于粗体向量或矩阵（仅对英文字母有效）。例如 \verb|\mathbf{v}| 的效果为：$\mathbf{v}$。
+    \item \verb|\mathsf{...}|（无衬线）：例如 \verb|\mathsf{E=mc^2}| 的效果为：$\mathsf{E=mc^2}$。
+    \item \verb|\mathtt{...}|（等宽打印机字体）：例如 \verb|\mathtt{Code}| 的效果为：
+    $\mathtt{Code}$。
+\end{itemize}
+
+\subsubsection{特殊数学字体}
+\begin{itemize}
+    \item \verb|\mathcal{...}|：常用于集合、算子等（仅限于大写字母）。例如 \verb|\mathcal{T}| 的效果为：$\mathcal{T}$。
+    \item \verb|\mathbb{...}|：常用于表示数集，如实数、整数等（仅限于大写字母）。例如 \verb|\mathbb{R}| 的效果为：$\mathbb{R}$。
+    \item \verb|\mathfrak{...}|：常用于李代数等。例如 \verb|\mathfrak{A}| 的效果为：$\mathfrak{A}$。
+\end{itemize}
+
+\subsubsection{希腊字母和符号的粗体控制}
+\verb|\mathbf{...}| 无法使希腊字母和大多数数学符号变粗。此时可以使用 \texttt{bm} 宏包。注意，在加载 \texttt{bm} 宏包时，确保 \texttt{bm} 宏包在 \texttt{amsmath} 宏包之后加载（如果同时使用）。语法如下：
+\begin{lstlisting}
+\bm{需要加粗的内容}
+\end{lstlisting}
+
+例如 \verb|$\bm{\sigma}$| 的效果为：$\bm{\sigma}$
+
+\subsection{定理类环境与结构化数学写作}
+在 \LaTeX 中，定理类环境是结构化数学写作的基石。它们用于清晰地展示定理、引理、定义、命题等关键概念，并实现自动编号和统一的格式。
+
+这个功能主要由 \texttt{amsmath} 宏包的配套宏包 \texttt{amsthm} 实现。因此使用前需要先引入宏包 \texttt{amsthm}。
+
+\subsubsection{newtheorem}
+所有定理类环境都必须在文档的导言区使用 、\verb|\newtheorem| 命令进行定义。基本语法如下：
+\begin{lstlisting}
+\newtheorem{thm/defn/prop/lem}[共享计数器对象]{打印名称}[编号方式]
+\end{lstlisting}
+
+\begin{itemize}
+    \item 共享计数器：和共享计数器对象共享一个计数器。
+    \item 打印名称：实际显示在文档中的文字，例如 “定理”、“定义”、“引理”等。
+    \item 编号方式：将定理编号与文档结构（例如 section、chapter 等）挂钩，并在每章/节开始时重置计数器。
+\end{itemize}
+
+例如：
+\begin{lstlisting}
+% 定义一个名为 'thm' 的环境，打印为 '定理'
+\newtheorem{thm}{定理}[section]
+% 定义一个名为 'defn' 的环境，打印为 '定义'
+\newtheorem{defn}{定义}
+% 2. 定义引理，使用定理的计数器 [thm]
+\newtheorem{lem}[thm]{引理}
+\end{lstlisting}
+
+一旦定义，就可以在文档主体中使用，使用方法如下：
+\begin{lstlisting}
+\begin{thm/defn/prop/lem}[该thm/defn/prop/lem的名字]
+具体内容
+\end{thm/defn/prop/lem}
+\end{lstlisting}
+
+例如：
+\begin{lstlisting}
+\begin{thm}[连续和可积的关系]
+如果函数 $f$ 在区间 $[a, b]$ 上连续，那么它在该区间上必可积。
+\end{thm}
+
+\begin{defn}
+称函数 $f(x)$ 是连续的，如果对任意 $\epsilon > 0$，存在 $\delta > 0$，使得当 $|x - x_0| < \delta$ 时，有 $|f(x) - f(x_0)| < \epsilon$。
+\end{defn}
+
+\begin{lem} % 结果：引理 2.8.2
+这是一条引理
+\end{lem}   
+\end{lstlisting}
+
+表示：
+\begin{thm}[连续和可积的关系]
+ 如果函数 $f$ 在区间 $[a, b]$ 上连续，那么它在该区间上必可积。
+\end{thm}
+
+\begin{defn}
+称函数 $f(x)$ 是连续的，如果对任意 $\epsilon > 0$，存在 $\delta > 0$，使得当 $|x - x_0| < \delta$ 时，有 $|f(x) - f(x_0)| < \epsilon$。
+\end{defn}
+
+\begin{lem} % 结果：引理 2.8.2
+这是一条引理
+\end{lem}
+
+\subsubsection{样式控制}
+\texttt{amsthm} 宏包提供了 \verb|\theoremstyle| 命令来修改后续 \verb|\newtheorem| 环境的默认外观。它必须在 \verb|\newtheorem| 之前使用。使用方法如下：
+\begin{lstlisting}
+\theorem{plain/definition/remark}
+\newtheorem...
+\end{lstlisting}
+
+\begin{itemize}
+    \item \texttt{plain}（默认样式）：标题粗体，正文斜体。主要用于定理、引理、命题、推论。
+    \item \texttt{definition}：标题粗体，正文正体。主要用于定义、例题、性质、公理。
+    \item \texttt{remark}：标题斜体、正文正体。主要用于注释、评注、例子。
+\end{itemize}
+
+\subsubsection{证明环境 proof}
+\texttt{amsthm} 宏包提供了一个专门的 \texttt{proof} 环境，用于排版证明文本。使用方法如下：
+\begin{lstlisting}
+\begin{proof}[证明标题]
+证明内容
+\end{proof}
+\end{lstlisting}
+
+它会自动在开头打印 "证明"（或 "Proof."），并在末尾添加一个证毕符号（Q.E.D. 符号，通常是一个实心小方块 ■）。
+
+例如：
+\begin{lstlisting}
+\begin{proof}
+    证明方式如下...
+\end{proof}
+\end{lstlisting}
+
+效果为：
+\begin{proof}
+    证明方式如下...
+\end{proof}
+
+如果证明的最后一行是一个行间公式环境（如 \texttt{align*} 或 \texttt{equation*}），证毕符号默认会出现在下一行。为了让它紧跟在公式后面，需要在公式环境内使用 \verb|\qedhere|。
+
+例如：
+\begin{lstlisting}
+\begin{proof}
+  ...所以我们得到：
+  \begin{equation*}
+    a^2 + b^2 = c^2 \qedhere
+  \end{equation*}
+\end{proof}
+\end{lstlisting}
+
+效果为：
+\begin{proof}
+  ...所以我们得到：
+  \begin{equation*}
+    a^2 + b^2 = c^2 \qedhere
+  \end{equation*}
+\end{proof}
+
+\section{文献管理与引用——BibTeX}
+
+\subsection{BibTeX 简单介绍}
+BibTeX 是 \LaTeX 生态系统中处理参考文献和引用的经典且强大的工具。极大地简化了学术写作中的引用管理工作。整个 BibTeX 引用系统涉及三个文件。
+\begin{itemize}
+    \item 数据库文件：包含所有引文信息（作者、标题、年份）的纯文本文件。
+    \item 样式文件：定义参考文献列表和正文引用格式的文件。
+    \item 主文档文件：\LaTeX 源代码文件，包含正文和引用命令。
+\end{itemize}
+
+\subsection{编译流程}
+编译流程为：\texttt{pdflatex} $\xrightarrow{}$ \texttt{bibtex} $\xrightarrow{}$ \texttt{pdflatex} $\xrightarrow{}$ \texttt{pdflatex}
+
+\subsection{.bib 数据库文件}
+\verb|.bib| 文件是一个纯文本文件，存储您的所有文献条目。
+
+每个条目都以 \verb|@| 符号开头，包含 3 部分：
+\begin{itemize}
+    \item 条目类型：
+    \begin{itemize}
+        \item \verb|@article|：期刊文章。
+        \item \verb|@book|：整本书。
+        \item \verb|@inproceedings|：会议论文。
+        \item \verb|@incollection|：书籍中的章节/论文。
+        \item \verb|@phdthesis|：学位论文。
+        \item \verb|@misc|：无法归类的文献。
+    \end{itemize}
+    \item 引用键：花括号中的第一个参数。这是在 \verb|.tex| 文件中用来引用的唯一标识符（\verb|cite| 命令会用到）。
+    \item 字段：作者、标题、年份等信息。用逗号分隔。
+\end{itemize}
+
+多个作者使用 \verb|AND| 连接。
+
+例如：
+\begin{lstlisting}
+@article{
+  feynman1965quantum,
+  author    = {Feynman, Richard P. and Vernon, Frank L. and Hellwarth, Robert W.},
+  title     = {Geometrical representation of the Schrödinger equation for a two-level system},
+  journal   = {Journal of Applied Physics},
+  volume    = {36},
+  number    = {11},
+  pages     = {3560--3562},
+  year      = {1965},
+  publisher = {AIP Publishing}
+}
+\end{lstlisting}
+
+有关 \verb|.bib| 条目的信息了解即可。
+
+\subsection{.bst 样式文件}
+\verb|.bst| 样式文件定义了引文和参考文献列表的排版规则。它们决定了：
+\begin{itemize}
+    \item 文献列表的排序方式（按作者字母、引用顺序等）。
+    \item 正文引用的格式（数字、作者-年份）。
+    \item 参考文献条目的具体格式（粗体、斜体、逗号、句号）。
+\end{itemize}
+
+常见的样式有：
+\begin{itemize}
+    \item \verb|plain|：
+    \begin{itemize}
+        \item 按作者字母顺序排序，正文引用格式为数字。
+        \item 标准、简介的科技论文格式。
+    \end{itemize}
+    \item \verb|unsrt|：
+    \begin{itemize}
+        \item 按引用出现的顺序排序，正文引用格式为数字。
+        \item 适合实验报告或按重要性排序的文档。
+    \end{itemize}
+    \item \verb|abbrv|：
+    \begin{itemize}
+        \item 按作者字母顺序排序，正文引用格式为数字。
+        \item 类似\verb|plain|，但缩写了期刊名和月份。
+    \end{itemize}
+    \item \verb|alpha|：
+    \begin{itemize}
+        \item 按作者字母顺序排序，正文引用格式为字母/数字组合。
+        \item 使用作者姓氏和年份的组合作为标签。
+    \end{itemize}    
+\end{itemize}
+
+\subsection{.tex 中实现引用}
+使用 \verb|cite| 命令将引文插入到正文中。语法如下：
+\begin{lstlisting}
+\cite{文献的引用键}
+\end{lstlisting}
+
+通常需要在文档末尾生成参考文献列表。为实现这一功能，需要在文档末尾（\verb|\appendix| 或 \verb|\end{document}| 之前），添加以下两个核心命令：
+\begin{enumerate}
+    \item \verb|\bibliographystyle{样式名}|：指定用于格式化的 \verb|.bst| 文件。
+    \begin{itemize}
+        \item 例如：\verb|\bibliographystyle{plain}|。
+    \end{itemize}
+    \item \verb|\bibliography{bib文件名}|：指定你的 \verb|.bib| 文件名（不包含 \verb|.bib| 后缀）。
+    \begin{itemize}
+        \item 如果有一个数据库文件名为 \verb|myref.bib|，则使用 \verb|\bibliography{myref}|。
+    \end{itemize}
+\end{enumerate}
+
+一个例子如下：
+\begin{lstlisting}
+\begin{document}
+  % ... 正文内容 ...
+  
+  \nocite{*} % 可选：将 .bib 文件中的所有文献都列出，即使没有在正文中引用。
+  
+  \newpage
+  \bibliographystyle{plain}
+  \bibliography{myreferences}
+
+\end{document}
+\end{lstlisting}
+
+另一个例子：
+\begin{lstlisting}
+参考这篇论文 \cite{10.5555/3295222.3295349}
+\end{lstlisting}
+
+效果为：参考这篇论文 \cite{10.5555/3295222.3295349}
+
+\subsection{natbib 宏包}
+虽然 BibTeX 本身功能强大，但其原生的 \verb|\cite| 命令比较单一。\verb|natbib| 宏包（需在导言区加载 \verb|\usepackage{natbib}|）是增强经典 \verb|BibTeX| 引用的标准工具，它允许更灵活的引用格式：
+\begin{itemize}
+    \item \verb|\citep{key}|：括号引用。
+    \begin{itemize}
+        \item 默认数字样式输出：\verb|[1]|
+        \item 默认作者-年份样式输出：\verb|(Einstein, 1905)|
+    \end{itemize}
+    \item \verb|\citet{key}|：作者引用。
+    \begin{itemize}
+        \item 默认数字样式输出：\verb|Einstein [1]|
+        \item 默认作者-年份样式输出：\verb|Einstein(1905)|
+    \end{itemize}
+    \item \verb|\citeauthor{key}|：仅作者名。
+    \begin{itemize}
+        \item 默认数字样式输出：\verb|Einstein|
+        \item 默认作者-年份样式输出：\verb|Einstein|
+    \end{itemize}
+    \item \verb|\citeyear{key}|：仅年份。
+    \begin{itemize}
+        \item 默认数字样式输出：\verb|1905|
+        \item 默认作者-年份样式输出：\verb|1905|
+    \end{itemize}
+\end{itemize}
+
+\newpage
+\bibliographystyle{plain}
+\bibliography{exampleref}
+
+\end{document}
